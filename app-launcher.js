@@ -1,38 +1,38 @@
 class AppSelectorClass extends HTMLElement {
 
-  // need this to return the dataList when using the web component outside the angular environment to trigger
-  // the attributeChangedCallback life cycle
-  static get observedAttributes() {
-    return ['data'];
-  }
+    // need this to return the dataList when using the web component outside the angular environment to trigger
+    // the attributeChangedCallback life cycle
+    static get observedAttributes() {
+        return ['data'];
+    }
 
-  constructor(
-    appSelector = null,
-    appLauncher = null,
-    button = null,
-    template = null,
-    clickMoreShowDisplay = null,
-    secondSet = null,
-    scroll = false,
-    dataListStore = null,
-    markup = null,
-    outerShell = null,
-  ) {
-    super();
-    this.attachShadow({
-      mode: 'open'
-    });
-  }
+    constructor(
+        appSelector = null,
+        appLauncher = null,
+        button = null,
+        template = null,
+        clickMoreShowDisplay = null,
+        secondSet = null,
+        scroll = false,
+        dataListStore = null,
+        markup = null,
+        outerShell = null,
+    ) {
+        super();
+        this.attachShadow({
+            mode: 'open'
+        });
+    }
 
-  /**
-   * native web component call back that is used to attach shadow DOM and creating template using the slot tags, which is
-   * used to inject HTML inside the slot tags
-   */
-  connectedCallback() {
-    // creating template rather than relying on the projects
-    this.template = document.createElement('template');
-    this.template.innerHTML =
-      `
+    /**
+     * native web component call back that is used to attach shadow DOM and creating template using the slot tags, which is
+     * used to inject HTML inside the slot tags
+     */
+    connectedCallback() {
+        // creating template rather than relying on the projects
+        this.template = document.createElement('template');
+        this.template.innerHTML =
+            `
         <div>
           <slot name="outer-shell">
             <div>
@@ -42,30 +42,30 @@ class AppSelectorClass extends HTMLElement {
         </div>
       `;
 
-    // append shadow root
-    this.shadowRoot
-      .appendChild(
-        this.template.content.cloneNode(true)
-      );
+        // append shadow root
+        this.shadowRoot
+            .appendChild(
+                this.template.content.cloneNode(true)
+            );
 
-    this.setAllEventListeners();
-  }
-
-  // in case we are using the web component outside angular environment, we need to use attributes to pass the data
-  attributeChangedCallback(attrName, oldVal, newVal) {
-    if (attrName === 'data') {
-      this.dataList = JSON.parse(newVal);
+        this.setAllEventListeners();
     }
-  }
 
-  /**
-   * generate the other html that is used to attach above the drop down list
-   * if only one applciation then will show the image insteadd of showing nine dots thumbnail
-   */
-  generateOuterMarkup() {
-    if (this.dataListStore.length > 1) {
-      this.outerShell =
-        `
+    // in case we are using the web component outside angular environment, we need to use attributes to pass the data
+    attributeChangedCallback(attrName, oldVal, newVal) {
+        if (attrName === 'data') {
+            this.dataList = JSON.parse(newVal);
+        }
+    }
+
+    /**
+     * generate the other html that is used to attach above the drop down list
+     * if only one applciation then will show the image insteadd of showing nine dots thumbnail
+     */
+    generateOuterMarkup() {
+        if (this.dataListStore.length > 1) {
+            this.outerShell =
+                `
         <div slot="outer-shell">
           <div class="app-launcher-container">
             <div class="launcher">
@@ -82,10 +82,10 @@ class AppSelectorClass extends HTMLElement {
           </div>
         </div>
       `;
-    } else {
-      const singleApp = this.dataListStore[0];
-      this.outerShell =
-        `
+        } else {
+            const singleApp = this.dataListStore[0];
+            this.outerShell =
+                `
           <div slot="outer-shell">
             <div class="app-launcher-container">
               <div class="launcher">
@@ -97,43 +97,43 @@ class AppSelectorClass extends HTMLElement {
             </div>
           </div>
         `;
-    }
-  }
-
-  /**
-   * appends the out shell, style tags (which will not bubble outside the web component), and if more than one
-   * application then will append the ul list and drop down
-   */
-  appendTemplate() {
-    const style = document.createElement('style');
-    style.textContent = AppSelectorClassStyle;
-
-    const ulListMarkup = new DOMParser().parseFromString(this.markup, 'text/html').body.firstChild;
-    const outerShell = new DOMParser().parseFromString(this.outerShell, 'text/html').body.firstChild;
-    this.appendChild(outerShell);
-
-    // keep the style on the webcomponet rather then defining it over any places where the component is used
-    this.appendChild(style);
-    if (this.dataListStore.length > 1) {
-      this.querySelector('.apps' + this.unique).appendChild(ulListMarkup);
+        }
     }
 
-  }
+    /**
+     * appends the out shell, style tags (which will not bubble outside the web component), and if more than one
+     * application then will append the ul list and drop down
+     */
+    appendTemplate() {
+        const style = document.createElement('style');
+        style.textContent = AppSelectorClassStyle;
 
-  /**
-   * generate the template of the list that needs to be appended to the app launcher when the 
-   */
-  generateTemplate() {
+        const ulListMarkup = new DOMParser().parseFromString(this.markup, 'text/html').body.firstChild;
+        const outerShell = new DOMParser().parseFromString(this.outerShell, 'text/html').body.firstChild;
+        this.appendChild(outerShell);
 
-    this.markup = `
+        // keep the style on the webcomponet rather then defining it over any places where the component is used
+        this.appendChild(style);
+        if (this.dataListStore.length > 1) {
+            this.querySelector('.apps' + this.unique).appendChild(ulListMarkup);
+        }
+
+    }
+
+    /**
+     * generate the template of the list that needs to be appended to the app launcher when the 
+     */
+    generateTemplate() {
+
+        this.markup = `
       <ul class="first-set"
                   slot="new-slot">
       ${
-      this.dataListStore ?
-        this.dataListStore.map((individualData, i) =>
-          `
+            this.dataListStore ?
+                this.dataListStore.map((individualData, i) =>
+                    `
             ${i <= 8 ?
-            `
+                        `
                 <a href="${individualData.url}"
                     target="_blank">
                   <li>
@@ -141,14 +141,14 @@ class AppSelectorClass extends HTMLElement {
                   </li>
                 </a>
               ` : ``
-          }
+                    }
             ${i === 8 ?
-            `
+                        `
                 <button class="clickMoreShowDisplay clickMoreShowDisplay${this.unique}">More</button>
               ` : ``
-          }
+                    }
             ${i > 8 ?
-            `
+                        `
                 <a href="${individualData.url}"
                      target="_blank">
                     <li style="display: none;"
@@ -157,146 +157,142 @@ class AppSelectorClass extends HTMLElement {
                     </li>
                   </a>
               ` : ``
-          }
+                    }
           `).join('')
-        :
-        ``
-      }
+                :
+                ``
+            }
       </ul>
     `;
 
-  }
+    }
 
-  /**
-   * generate and append template only when the data arrives
-   */
-  generateAndAppendTemplate() {
-    this.generateOuterMarkup();
+    /**
+     * generate and append template only when the data arrives
+     */
+    generateAndAppendTemplate() {
+        this.generateOuterMarkup();
 
-    this.generateTemplate();
-    this.appendTemplate();
-  }
+        this.generateTemplate();
+        this.appendTemplate();
+    }
 
-  /**
-   * sets the event listeners for all the scroll animations, click event for displaying and hiding the drop down
-   * application list and click on show more button if it exists
-   */
-  setAllEventListeners() {
+    /**
+     * sets the event listeners for all the scroll animations, click event for displaying and hiding the drop down
+     * application list and click on show more button if it exists
+     */
+    setAllEventListeners() {
 
-    this.appSelector = document.querySelector('.apps' + this.unique);
-    this.appLauncher = document.querySelector('.app-launcher' + this.unique);
-    this.button = document.querySelector('.button' + this.unique);
-    this.clickMoreShowDisplay = document.querySelector('.clickMoreShowDisplay' + this.unique);
-    this.secondSet = document.querySelectorAll('.second-set' + this.unique);
+        this.appSelector = document.querySelector('.apps' + this.unique);
+        this.appLauncher = document.querySelector('.app-launcher' + this.unique);
+        this.button = document.querySelector('.button' + this.unique);
+        this.clickMoreShowDisplay = document.querySelector('.clickMoreShowDisplay' + this.unique);
+        this.secondSet = document.querySelectorAll('.second-set' + this.unique);
 
-    if (!this.appSelector) return;
+        if (!this.appSelector) return;
 
-    if (this.button) {
-      // Click event handler to toggle dropdown
-      this.button.addEventListener('click', (event) => {
-        event.stopPropagation();
-        if (this.appLauncher.style.display === "none") {
-          this.appLauncher.style.display = "block";
-        } else {
-          this.appLauncher.style.display = "none";
+        if (this.button) {
+            // Click event handler to toggle dropdown
+            this.button.addEventListener('click', (event) => {
+                event.stopPropagation();
+                if (this.appLauncher.style.display === "none") {
+                    this.appLauncher.style.display = "block";
+                } else {
+                    this.appLauncher.style.display = "none";
+                }
+            });
         }
-      });
-    }
 
-    //Hide the launcher if visible
-    document.addEventListener('click', () => { this.appLauncher.style.display = "none"; });
+        //Hide the launcher if visible
+        document.addEventListener('click', () => { this.appLauncher.style.display = "none"; });
 
-    // Prevent hiding on click inside app launcher
-    this.appLauncher.addEventListener('click', (event) => { event.stopPropagation(); });
+        // Prevent hiding on click inside app launcher
+        this.appLauncher.addEventListener('click', (event) => { event.stopPropagation(); });
 
-    // Mousewheel event handler to detect whether user has scrolled over the container
-    this.appSelector.addEventListener('mousewheel', (e) => { });
+        // Mousewheel event handler to detect whether user has scrolled over the container
+        this.appSelector.addEventListener('mousewheel', (e) => { });
 
-    // Scroll event to detect that scrollbar reached top of the container
-    this.appSelector.addEventListener('scroll', function () {
-      var pos = this.scrollTop;
-      const second = document.querySelectorAll('.second-set');
-      if (pos === 0) {
-        this.scroll = false;
-        this.classList.remove('overflow');
-        second.forEach((ele) => {
-          ele.style.display = "none";
+        // Scroll event to detect that scrollbar reached top of the container
+        this.appSelector.addEventListener('scroll', function () {
+            var pos = this.scrollTop;
+            const second = document.querySelectorAll('.second-set');
+            if (pos === 0) {
+                this.scroll = false;
+                this.classList.remove('overflow');
+                second.forEach((ele) => {
+                    ele.style.display = "none";
+                });
+            }
         });
-      }
-    });
 
-    if (this.clickMoreShowDisplay) {
-      this.clickMoreShowDisplay.addEventListener('click', () => {
-        if (this.secondSet) {
-          this.secondSet.forEach((ele) => {
-            ele.style.display = "block";
-          });
+        if (this.clickMoreShowDisplay) {
+            this.clickMoreShowDisplay.addEventListener('click', () => {
+                if (this.secondSet) {
+                    this.secondSet.forEach((ele) => {
+                        ele.style.display = "block";
+                    });
+                }
+                this.appSelector.animate({
+                    scrollTop: this.appSelector.scrollHeight,
+                });
+                this.appSelector.style.height = 296;
+                this.appSelector.classList.add('overflow');
+            });
         }
-        this.appSelector.animate({
-          scrollTop: this.appSelector.scrollHeight,
+
+        // Resize event handler to maintain the max-height of the app launcher
+        window.addEventListener('resize', () => { });
+    }
+
+    /**
+     * the images needs too be attached few seconds after the blob generation is done
+     */
+    attachImages() {
+        this.dataListStore.forEach(cli => {
+            if (document.querySelector('#' + cli.clientId + this.unique + '')) {
+                setTimeout(() => {
+                    document.querySelector('#' + cli.clientId + this.unique + '').src = cli.imgUrl;
+                }, 1200);
+            }
         });
-        this.appSelector.style.height = 296;
-        this.appSelector.classList.add('overflow');
-      });
     }
 
-    // Resize event handler to maintain the max-height of the app launcher
-    window.addEventListener('resize', () => { });
-  }
 
-  /**
-   * the images needs too be attached few seconds after the blob generation is done
-   */
-  attachImages() {
-    this.dataListStore.forEach(cli => {
-      if (document.querySelector('#' + cli.clientId + this.unique + '')) {
-        setTimeout(() => {
-          document.querySelector('#' + cli.clientId + this.unique + '').src = cli.imgUrl;
-        }, 1200);
-      }
-    });
-  }
-
-
-  /**
-   * attach unique to be able to differenciate app launcher just in case if exists more that one on any
-   * specific page
-   */
-  get unique() {
-    return this.getAttribute('unique');
-  }
-
-  set unique(newValue) {
-    this.setAttribute('unique', newValue);
-  }
-
-  /**
-   * inputs the data list from the parent component using ap launcher
-   */
-  get dataList() {
-    return this.getAttribute('dataList');
-  }
-
-  set dataList(newValue) {
-    if (newValue.length > 0) {
-      this.dataListStore = newValue;
-      this.generateAndAppendTemplate();
-      this.setAllEventListeners();
-      this.attachImages();
+    /**
+     * attach unique to be able to differenciate app launcher just in case if exists more that one on any
+     * specific page
+     */
+    get unique() {
+        return this.getAttribute('unique');
     }
-  }
 
-  // remove all bindings when move away from the component
-  disconnectedCallback() {
-    this.removeEventListener('click', this.clickMoreShowDisplay);
-    this.removeEventListener('scroll', this.appSelector);
-    this.removeEventListener('click', document);
-    this.removeEventListener('click', this.button);
-  }
-}
+    set unique(newValue) {
+        this.setAttribute('unique', newValue);
+    }
 
-module.exports = {
-  CustomElements: customElements.define('nt-app-launcher-apps', AppSelectorClass)
+    /**
+     * inputs the data list from the parent component using ap launcher
+     */
+    get dataList() {
+        return this.getAttribute('dataList');
+    }
+
+    set dataList(newValue) {
+        if (newValue.length > 0) {
+            this.dataListStore = newValue;
+            this.generateAndAppendTemplate();
+            this.setAllEventListeners();
+            this.attachImages();
+        }
+    }
+
+    // remove all bindings when move away from the component
+    disconnectedCallback() {
+        this.removeEventListener('click', this.clickMoreShowDisplay);
+        this.removeEventListener('scroll', this.appSelector);
+        this.removeEventListener('click', document);
+        this.removeEventListener('click', this.button);
+    }
 }
 
 AppSelectorClassStyle = `
@@ -334,3 +330,5 @@ AppSelectorClassStyle = `
 
   .appLauncherImages { height: 50px; width: 60px; }
 `;
+
+customElements.define('nt-app-launcher-apps', AppSelectorClass)

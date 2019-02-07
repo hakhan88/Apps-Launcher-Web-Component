@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Testing</title>
+    <meta charset="utf-8">
+    <!-- include app launcher -->
+    <script src="app-launcher.js" defer></script>
+    <script src="arraySample.js"></script>
+</head>
+<body>
+    <div class="container">
+        <nt-app-launcher-apps></nt-app-launcher-apps>
+    </div>
+    <script>
+        setTimeout(() => {
+            const select = document.querySelector('nt-app-launcher-apps');
+            select.setAttribute("data", JSON.stringify(dataList));
+        }, 0);
+    </script>
+</body>
+</html>
